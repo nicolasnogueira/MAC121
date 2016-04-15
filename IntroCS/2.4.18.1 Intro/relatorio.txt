@@ -1,0 +1,7 @@
+ Nome: Nícolas Nogueira Lopes da Silva
+ Nº USP: 9277541
+
+ Relatório sobre exercício 2.4.18
+
+ Para o maior valor de N que eu consegui sem dar o erro de StackOverflow,
+ o valor de p limite encontrado foi de 0.3203 sendo N = 31.

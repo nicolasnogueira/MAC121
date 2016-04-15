@@ -1,0 +1,54 @@
+ Nome: Nícolas Nogueira Lopes da Silva
+ Nº USP: 9277541
+
+ Relatório sobre exercício 1.3.36 (Algs4)
+
+ A observação do histograma não é muito interessante com uma amostra pequena 
+ (< 5 observações para cada permutação), com T = 3600 já é possível observar, 
+ ainda fraca, uma tendência de valores para as frequências que fica mais evidente
+ à medida que o tamanho da amostra (T) aumenta. Com um T grande, como por exemplo 
+ T = 720000, é possível observar nitidamente que a amostra segue uma distribuição
+ de probabilidade uniforme.
+
+ Teste de hipótese
+
+ Para testar o iterador do RandomQueue eu utilizei o teste de aderência ou teste
+ qui-quadrado que a partir de uma amostra verifica se ela segue uma distribuição
+ de probabilidade. Para cada valor observado de cada elemento da amostra existe
+ um valor esperado que é o valor para aquele elemento na população que segue tal 
+ distribuição de probabilidade. Como queremos testar se o iterador é aleatório,
+ a população esperada de frequências segue uma distribuição de probabilidade
+ uniforme. No caso queremos testar uma hípótese nula em que a população amostral
+ segue uma distribuição uniforme discreta e uma hipótese alternativa onde a
+ população não segue uma distribuição uniforme.
+
+ A estatística para o teste de hipótese é o qui-quadrado calculado, que é:
+
+ χ² = Σ [(O - E)2 /E]
+
+ Onde O é cada valor observado e E o valor esperado correspondente. Supondo que
+ a hipótese nula seja verdadeira a estatística segue uma distribuição Qui-quadrado
+ com N - 1 onde N é o número de classes da amostra.
+
+ Adota-se um nível de significância (alfa) para este teste que representa a máxima
+ probabilidade de erro que se tem ao rejeitar uma hipótese, e com este alfa obtemos
+ o χ²c tabelado. Quando χ² >= χ²c rejeita-se a hipótese nula e quando χ² < χ²c não
+ rejeitamos a hipótese nula.
+
+ Fiz uma versão do TesteVisual em que para fazer o teste do Qui-quadrado eu utilizei
+ uma biblioteca da apache.org que realiza a verificação a partir de um vetor de 
+ valores observados e um de valores esperados e o alfa. (Leia o README para maiores
+ detalhes).
+
+ Como sem usar essa biblioteca eu não possuo a tabela de qui-quadrado para valores
+ de graus de liberdade maiores que 50, eu fiz testes "na mão" calculando o valor do
+ qui-quadrado para uma amostra gerada a partir de N = 3 e T = 150 e comparando os
+ valores em uma tabela qui-quadrado com 5 graus de liberdade e verificando que não 
+ rejeita-se a hipótese nula.
+
+ Exemplo: teste para N = 3, T = 150 e alfa = 0.01
+
+ χ² = 6.4799999999999995
+ χ²c = 15,086
+
+ Como χ² < χ²c então não rejeita-se a hipótese nula.

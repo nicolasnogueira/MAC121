@@ -1,0 +1,15 @@
+ Nome: Nícolas Nogueira Lopes da Silva
+ Nº USP: 9277541
+
+ Relatório sobre exercício 3.2.47
+
+ Conforme o número de passos aumenta, o valor da distância também aumenta, de
+ forma que em média o valor da distância é aproximadamente o valor da raiz do
+ número de passos.
+
+ Isto fica evidente quando simulamos um número grande de random walkers no 
+ Distribution, a figura se aproxima de uma circunferência com raio sendo o
+ valor da raiz do número de passos.
+
+ Na pasta imgs estão duas imagens que mostram um exemplo do que acontece quando
+ aumenta-se o número de random walkers.

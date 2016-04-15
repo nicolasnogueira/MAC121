@@ -1,0 +1,7 @@
+ Nome: Nícolas Nogueira Lopes da Silva
+ Nº USP: 9277541
+
+ Relatório sobre exercício Probabilidade Crítica 3D
+
+ Para o maior valor de N que eu consegui sem dar o erro de StackOverflow,
+ a média para o valor de p crítico foi por volta de 0.3164 sendo N = 32.

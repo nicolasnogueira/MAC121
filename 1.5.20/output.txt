@@ -1,0 +1,26 @@
+Pares unidos na union find:
+
+2 10
+3 5
+2 8
+10 5
+7 4
+5 1
+85 1100
+2541 10
+
+Varredura no vetor com elementos utilizados em algum union:
+
+1 2
+2 2
+3 2
+4 7
+5 2
+7 7
+8 2
+10 2
+85 85
+1100 85
+2541 2
+
+Tamanho do vetor: 2542

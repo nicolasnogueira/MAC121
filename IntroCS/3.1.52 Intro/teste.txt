@@ -1,0 +1,37 @@
+teste-guardachuva
+teste-guardachuva2
+qtf
+qtf2
+wtf
+wtf2
+coisa
+coisa2
+alguma
+alguma2
+coisa
+coisa1
+la-la
+la-la2
+wtf
+wtf1
+wtf
+wtf1
+TAMANHO CMP = 6
+alguma comparando alguma = 0
+coisa comparando alguma = -1
+la-la comparando alguma = 0
+qtf comparando alguma = 0
+teste-guardachuva comparando alguma = 0
+wtf comparando alguma = -1
+wtf comparando coisa = -1
+TAMANHO 1 = 6 TAMANHO 2 = 3
+1alguma 1
+1coisa 2
+1la-la 1
+1qtf 1
+1teste-guardachuva 1
+1wtf 3
+2wtf 3
+2coisa 2
+2alguma 1
+[alguma, coisa, la-la, qtf, teste-guardachuva, wtf]
