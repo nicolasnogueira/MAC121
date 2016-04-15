@@ -1,0 +1,306 @@
+/* -*- coding: iso-latin-1-unix; -*- */
+/* DECLARO QUE SOU O UNICO AUTOR E RESPONSAVEL POR ESTE PROGRAMA. 
+// TODAS AS PARTES DO PROGRAMA, EXCETO AS QUE FORAM FORNECIDAS 
+// PELO PROFESSOR OU COPIADAS DO LIVRO OU DAS BIBLIOTECAS DE 
+// SEDGEWICK OU ROBERTS, FORAM DESENVOLVIDAS POR MIM.  DECLARO 
+// TAMBEM QUE SOU RESPONSAVEL POR TODAS AS COPIAS DESTE PROGRAMA 
+// E QUE NAO DISTRIBUI NEM FACILITEI A DISTRIBUICAO DE COPIAS. 
+// 
+// Autor: Nicolas Nogueira Lopes da Silva 
+// Numero USP: 9277541 
+// Sigla: NICOLASN 
+// Data: 2015-11-23 
+// 
+// Este arquivo faz parte da tarefa I 
+// da disciplina MAC0121. 
+//
+// Este modulo implementa a interface arvorebinaria.h
+//
+// As funcoes insere, busca e altura utilizadas aqui foram 
+// baseadas em funcoes dos sitios disponibilizado pelo professor  
+// para a execucao da tarefa.
+// http://www.ime.usp.br/~pf/algoritmos/aulas/bint.html
+// http://www.ime.usp.br/~pf/algoritmos/aulas/binst.html
+//
+///////////////////////////////////////////////////////////////*/
+
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "arvorebinaria.h"
+
+/* //// Funcao lerLinha ///////////////////////////////////////// 
+// 
+// Função de leitura de linha de arquivo de texto retirada do 
+// sítio disponibilizado pelo professor em: 
+// http://www.ime.usp.br/~pf/algoritmos/aulas/io2.html#resizing
+// 
+// Esta funcao le um arquivo de texto infile e devolve uma 
+// char * que equivale a uma linha processada deste arquivo.
+//
+////////////////////////////////////////////////////////////////*/
+
+static char *lerLinha (FILE * infile) {
+    char *line;
+    int n, ch, size;
+    n = 0;
+    size = 120;
+    line = malloc (size + 1);
+    while ((ch = getc (infile)) != '\n' && ch != EOF) {
+        if (n == size) {
+            size *= 2;
+            line = malloc (size + 1);
+        }
+        line[n++] = ch;
+    }
+    if (n == 0 && ch == EOF) {
+        free (line);
+        return NULL;
+    }
+    line[n] = '\0';
+    return line;
+}
+
+/* //// Funcao normalizar /////////////////////////////////////// 
+// 
+// Função que le  uma string pal e retorna a mesma string com 
+// todos os caracteres em caixa baixa. 
+//
+///////////////////////////////////////////////////////////////*/
+
+static char *normalizar (char *pal) {
+    int n;
+    for (n = 0; pal[n] != '\0'; n++)
+        if (pal[n] >= 65 && pal[n] <= 90)
+            pal[n] = pal[n] + 32;
+    return pal;
+}
+
+/* //// Funcao criaNo /////////////////////////////////////////// 
+// 
+// Recebe uma string pal, de tamanho tampal e um inteiro linha
+// e cria uma folha com essas propriedades, retornando seu 
+// ponteiro ao final.
+//
+///////////////////////////////////////////////////////////////*/ 
+
+static noh *criaNo (char *pal, int linha, int tampal) {
+    noh *node;
+    char *temp;
+    temp = malloc (tampal + 1);
+    strcpy (temp, pal);
+    node = malloc (sizeof (noh));
+    node->chave = temp;
+    node->lista = malloc (sizeof (celula));
+    node->lista->conteudo = linha;
+    node->lista->prox = NULL;
+    node->esq = NULL;
+    node->dir = NULL;
+    return node;
+}
+
+/* //// Funcao insere /////////////////////////////////////////// 
+// 
+//  A função recebe uma arvore de busca r e uma 
+//  folha novo que não pertence a árvore. 
+//  A funcao insere a folha na arvore
+//  de modo que a arvore continue sendo de busca 
+//  e devolve o endereço da arvore resultante. 
+//
+///////////////////////////////////////////////////////////////*/ 
+
+static arvore insere (arvore r, noh * novo) {
+    noh *filho, *pai;
+    if (r == NULL)
+        return novo;
+    filho = r;
+    while (filho != NULL) {
+        pai = filho;
+        if (strcmp (filho->chave, novo->chave) > 0)
+            filho = filho->esq;
+        else
+            filho = filho->dir;
+    }
+    if (strcmp (pai->chave, novo->chave) > 0)
+        pai->esq = novo;
+    else
+        pai->dir = novo;
+    return r;
+}
+
+/* //// Funcao busca //////////////////////////////////////////// 
+// 
+// Recebe um numero k e uma arvore de busca r. 
+// Devolve um no cuja chave e k; 
+// se tal no nao existe, devolve NULL. 
+//
+///////////////////////////////////////////////////////////////*/ 
+
+static noh *busca (arvore r, char *k) {
+    int tmp;
+    if (r == NULL)
+        return r;
+    tmp = strcmp (r->chave, k);
+    if (tmp == 0)
+        return r;
+    if (tmp > 0)
+        return busca (r->esq, k);
+    else
+        return busca (r->dir, k);
+}
+
+/* //// Funcao inserePalavra //////////////////////////////////// 
+// 
+// Dada uma arvore r, uma string palavra de tamanho tam e um
+// inteiro n, atualiza a arvore r com a aparicao da palavra na
+// linha de numero n e retorna a arvore atualizada.
+//
+///////////////////////////////////////////////////////////////*/
+
+static arvore inserirPalavra (arvore r, char *pal, int n,
+                              int tam) {
+    celula *temp, *novo;
+    noh *node;
+    if (r == NULL) {
+        node = criaNo (pal, n, tam);
+        r = insere (r, node);
+        return r;
+    }
+    node = busca (r, pal);
+    if (node == NULL) {
+        node = criaNo (pal, n, tam);
+        r = insere (r, node);
+    }
+    else {
+        temp = node->lista;
+        while (temp->prox != NULL) {
+            temp = temp->prox;
+        }
+        novo = malloc (sizeof (celula));
+        novo->conteudo = n;
+        novo->prox = NULL;
+        temp->prox = novo;
+    }
+    return r;
+}
+
+/* //// Funcao processarLinha /////////////////////////////////// 
+// 
+// Recebe arvore r e uma string linha. Processa todas as palavras
+// no interior desta string e retorna a arvore com as aparicoes
+// das palavras na linha de numero num.
+//
+///////////////////////////////////////////////////////////////*/
+
+static arvore processarLinha (char *linha, int num, arvore r) {
+    char *palavra;
+    int ler = 0, escrita = 0, tamanho = 20;
+    palavra = malloc (tamanho + 1);
+    while (linha[ler] != '\0') {
+        if (isalnum (linha[ler])) {
+            if (escrita == tamanho) {
+                tamanho *= 2;
+                palavra = malloc (tamanho + 1);
+            }
+            palavra[escrita] = linha[ler];
+            escrita++;
+        }
+        else {
+            palavra[escrita] = '\0';
+            palavra = normalizar (palavra);
+            if (escrita > 2 && isalpha (palavra[0])) {
+                r = inserirPalavra (r, palavra, num, escrita);
+            }
+            escrita = 0;
+            tamanho = 20;
+            free (palavra);
+            palavra = malloc (tamanho + 1);
+        }
+        ler++;
+    }
+    palavra[escrita] = '\0';
+    palavra = normalizar (palavra);
+    if (escrita > 2 && isalpha (palavra[0]))
+        r = inserirPalavra (r, palavra, num, escrita);
+    free (palavra);
+    return r;
+}
+
+arvore criarIndice (FILE * entrada) {
+    arvore r;
+    char *s;
+    int linhanum = 1;
+    r = NULL;
+    while ((s = lerLinha (entrada)) != NULL) {
+        r = processarLinha (s, linhanum, r);
+        free (s);
+        linhanum++;
+    }
+    free (s);
+    return r;
+}
+
+int calcNos (arvore r) {
+    if (r != NULL) {
+        return calcNos (r->esq) + 1 + calcNos (r->dir);
+    }
+    return 0;
+}
+
+void imprimeInd (arvore r, FILE * saida) {
+    celula *temp;
+    if (r != NULL) {
+        imprimeInd (r->esq, saida);
+        fprintf (saida, "%-20s ", r->chave);
+        temp = r->lista;
+        if (temp != NULL) {
+            fprintf (saida, "%d", temp->conteudo);
+            temp = temp->prox;
+        }
+        while (temp != NULL) {
+            fprintf (saida, ", %d", temp->conteudo);
+            temp = temp->prox;
+        }
+        fprintf (saida, "\n");
+        imprimeInd (r->dir, saida);
+    }
+}
+
+int altura (arvore r) {
+    if (r == NULL)
+        return -1;
+    else {
+        int he = altura (r->esq);
+        int hd = altura (r->dir);
+        if (he < hd)
+            return hd + 1;
+        else
+            return he + 1;
+    }
+}
+
+/*///// desalocarLista //////////////////////////////////////////
+//
+//   Libera o espaco ocupado pela lista encadeada lista.             
+//
+///////////////////////////////////////////////////////////////*/
+
+static void desalocaLista (celula *lista) {
+    celula *tmp, *p;
+    tmp = lista;
+    while (tmp != NULL) {
+        p = tmp->prox;
+        free (tmp);
+        tmp = p;
+    }
+}
+
+void desalocarArvore (arvore r) {
+    if (r != NULL) {
+        desalocarArvore (r->esq);
+        desalocarArvore (r->dir);
+        desalocaLista (r->lista);
+        free (r->chave);
+        free (r);
+    }
+}
