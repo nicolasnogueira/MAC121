@@ -1,0 +1,4 @@
+Tempo de construcao do indice: 0.7685
+Numero de nos (n): 4465
+Altura: 29
+Piso de log n: 12

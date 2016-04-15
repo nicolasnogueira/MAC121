@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+
+c=""
+for i in `seq -w 1 100`;
+do
+c="$c $i.txt"
+done
+c="./mergemultiplo $1 $c $2" 
+eval $c
